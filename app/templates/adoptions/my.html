@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Mis solicitudes{% endblock %}
+{% block content %}
+<h1>Mis solicitudes de adopción</h1>
+{% if requests %}
+<table class="table">
+  <thead><tr><th>Mascota</th><th>Estado</th><th>Fecha</th></tr></thead>
+  <tbody>
+  {% for req in requests %}
+  <tr>
+    <td><a href="{{ url_for('pets.detail', pet_id=req.pet_id) }}">{{ req.pet.name }}</a></td>
+    <td><span class="badge bg-{% if req.status.value=='pending' %}warning text-dark{% elif req.status.value=='approved' %}success{% else %}danger{% endif %}">{{ req.status.value }}</span></td>
+    <td>{{ req.created_at.strftime('%d/%m/%Y') }}</td>
+  </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p>No tienes solicitudes aún.</p>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% block title %}{{ pet.name }}{% endblock %}
+{% block content %}
+<div class="row">
+  <div class="col-md-6">
+  {% if pet.photos %}
+    <div id="gallery" class="carousel slide" data-bs-ride="carousel">
+      <div class="carousel-inner">
+        {% for photo in pet.photos %}
+        <div class="carousel-item {% if photo.is_primary or loop.first %}active{% endif %}">
+          <img src="{{ url_for('static', filename=photo.url) }}" class="d-block w-100 rounded" alt="{{ pet.name }}">
+        </div>
+        {% endfor %}
+      </div>
+      {% if pet.photos|length > 1 %}
+      <button class="carousel-control-prev" type="button" data-bs-target="#gallery" data-bs-slide="prev"><span class="carousel-control-prev-icon"></span></button>
+      <button class="carousel-control-next" type="button" data-bs-target="#gallery" data-bs-slide="next"><span class="carousel-control-next-icon"></span></button>
+      {% endif %}
+    </div>
+  {% endif %}
+  </div>
+  <div class="col-md-6">
+    <h1>{{ pet.name }}
+      {% if current_user.is_authenticated and current_user.role.value == 'adopter' %}
+      <button type="button" class="favorite-btn" id="fav-btn" data-pet-id="{{ pet.id }}" title="Favorito">
+        {% if is_favorite %}❤️{% else %}🤍{% endif %}
+      </button>
+      {% endif %}
+    </h1>
+    {% if pet.status.value == 'adopted' %}<span class="badge bg-secondary">Ya adoptado</span>{% endif %}
+    {% if pet.status.value == 'pending' %}<span class="badge bg-warning text-dark">Adopción en proceso</span>{% endif %}
+    <p><strong>{{ pet.species.value }}</strong> · {{ pet.breed or 'Raza no indicada' }} · {{ pet.size.value if pet.size else '—' }} · {{ pet.age_years if pet.age_years is not none else '?' }} años</p>
+    {% if pet.temperament %}<p>{% for t in pet.temperament.split(',') %}<span class="badge bg-info text-dark">{{ t.strip() }}</span> {% endfor %}</p>{% endif %}
+    <p>{{ pet.description }}</p>
+    <h5>Compatibilidad</h5>
+    <span class="badge {% if pet.children_friendly %}bg-success{% else %}bg-secondary{% endif %}">{% if pet.children_friendly %}Apto con niños{% else %}No verificado (niños){% endif %}</span>
+    <span class="badge {% if pet.other_animals_friendly %}bg-success{% else %}bg-secondary{% endif %}">{% if pet.other_animals_friendly %}Apto con otros animales{% else %}No verificado (otros animales){% endif %}</span>
+    <h5 class="mt-3">Historial médico</h5>
+    <p>{{ pet.medical_history or 'No indicado' }}</p>
+    <h5>Requisitos especiales</h5>
+    <p>{{ pet.special_requirements or 'Ninguno' }}</p>
+    <h5>Refugio</h5>
+    <p>{{ pet.shelter.name }} · {{ pet.shelter.city or '—' }}<br>
+    Valoración: {{ shelter_avg }}/5 ({{ shelter_review_count }} reseñas)<br>
+    <a href="{{ url_for('reviews.shelter_profile', shelter_id=pet.shelter_id) }}">Ver perfil del refugio</a></p>
+    <div class="mt-3">
+      {% if current_user.is_authenticated and current_user.role.value == 'adopter' %}
+        {% if pet.status.value == 'available' %}
+          {% if existing_request %}
+            <span class="btn btn-secondary disabled">Solicitud enviada</span>
+          {% else %}
+            <a href="{{ url_for('adoptions.apply', pet_id=pet.id) }}" class="btn btn-success">Solicitar adopción</a>
+          {% endif %}
+        {% endif %}
+        <a href="{{ url_for('messages.conversation', user_id=pet.shelter_id, pet_id=pet.id) }}" class="btn btn-outline-primary">Enviar mensaje</a>
+      {% endif %}
+      {% if can_edit %}
+        <a href="{{ url_for('pets.edit', pet_id=pet.id) }}" class="btn btn-warning">Editar</a>
+        <form method="post" action="{{ url_for('pets.delete', pet_id=pet.id) }}" class="d-inline" onsubmit="return confirm('¿Eliminar mascota?')">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          <button type="submit" class="btn btn-danger">Eliminar</button>
+        </form>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}
+{% if current_user.is_authenticated and current_user.role.value == 'adopter' %}
+<script>
+document.getElementById('fav-btn')?.addEventListener('click', async function() {
+  const petId = this.dataset.petId;
+  const token = document.querySelector('meta[name="csrf-token"]').content;
+  const res = await fetch(`/pets/${petId}/favorite`, {method: 'POST', headers: {'X-CSRFToken': token}});
+  const data = await res.json();
+  if (data.redirect) { window.location = data.redirect; return; }
+  if (data.status === 'added') this.textContent = '❤️';
+  if (data.status === 'removed') this.textContent = '🤍';
+});
+</script>
+{% endif %}
+{% endblock %}

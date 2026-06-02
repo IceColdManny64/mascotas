@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Notificaciones{% endblock %}
+{% block content %}
+<h1>Notificaciones</h1>
+<form method="post" action="{{ url_for('alerts.mark_read') }}" class="mb-3">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+  <button class="btn btn-sm btn-secondary">Marcar todas como leídas</button>
+</form>
+<ul class="list-group">
+{% for n in notifications %}
+  <li class="list-group-item {% if not n.is_read %}list-group-item-primary{% endif %}">
+    <strong>{{ n.type.value }}</strong> — {{ n.message }}
+    {% if n.link %}<a href="{{ n.link }}" class="ms-2">Ver</a>{% endif %}
+    <small class="text-muted d-block">{{ n.created_at.strftime('%d/%m/%Y %H:%M') }}</small>
+  </li>
+{% else %}
+  <li class="list-group-item">No tienes notificaciones.</li>
+{% endfor %}
+</ul>
+{% endblock %}

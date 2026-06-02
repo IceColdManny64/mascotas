@@ -1,6 +1,6 @@
 # Estado del Proyecto
 
-Ver también [PROGRESS.md](../../PROGRESS.md) en la raíz del repositorio.
+Actualizar este archivo cada vez que se complete o inicie una feature.
 
 ## Leyenda
 - 🔴 Pendiente — no iniciada
@@ -30,8 +30,8 @@ Ver también [PROGRESS.md](../../PROGRESS.md) en la raíz del repositorio.
 ## Docker Setup
 - [x] Dockerfile creado
 - [x] docker-compose.yml creado
-- [x] `docker-compose up` levanta sin errores
+- [x] `docker-compose up` levanta sin errores (verificar en tu máquina)
 
 ## Base de datos
 - [x] Migraciones iniciales ejecutadas
-- [x] Usuario admin seed creado
+- [x] Usuario admin seed creado (`admin@mascotas.local` / `admin12345`)

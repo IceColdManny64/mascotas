@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Solicitar adopción{% endblock %}
+{% block content %}
+<h1>Solicitud para {{ pet.name }}</h1>
+<form method="post">
+  {{ form.hidden_tag() }}
+  <div class="mb-3">{{ form.home_type.label(class="form-label") }}{{ form.home_type(class="form-select") }}</div>
+  <div class="form-check mb-2">{{ form.has_yard(class="form-check-input") }}{{ form.has_yard.label(class="form-check-label") }}</div>
+  <div class="form-check mb-2">{{ form.other_pets(class="form-check-input") }}{{ form.other_pets.label(class="form-check-label") }}</div>
+  <div class="mb-3">{{ form.other_pets_desc.label(class="form-label") }}{{ form.other_pets_desc(class="form-control") }}</div>
+  <div class="form-check mb-2">{{ form.has_children(class="form-check-input") }}{{ form.has_children.label(class="form-check-label") }}</div>
+  <div class="mb-3">{{ form.children_ages.label(class="form-label") }}{{ form.children_ages(class="form-control") }}</div>
+  <div class="mb-3">{{ form.experience.label(class="form-label") }}{{ form.experience(class="form-control", rows=4) }}{% for e in form.experience.errors %}<div class="text-danger">{{ e }}</div>{% endfor %}</div>
+  <div class="mb-3">{{ form.motivation.label(class="form-label") }}{{ form.motivation(class="form-control", rows=4) }}{% for e in form.motivation.errors %}<div class="text-danger">{{ e }}</div>{% endfor %}</div>
+  {{ form.submit(class="btn btn-success") }}
+</form>
+{% endblock %}

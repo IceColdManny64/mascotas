@@ -1,0 +1,16 @@
+<form method="post" enctype="multipart/form-data">
+  {{ form.hidden_tag() }}
+  <div class="mb-3">{{ form.name.label(class="form-label") }}{{ form.name(class="form-control") }}{% for e in form.name.errors %}<div class="text-danger">{{ e }}</div>{% endfor %}</div>
+  <div class="mb-3">{{ form.species.label(class="form-label") }}{{ form.species(class="form-select") }}</div>
+  <div class="mb-3">{{ form.breed.label(class="form-label") }}{{ form.breed(class="form-control") }}</div>
+  <div class="mb-3">{{ form.age_years.label(class="form-label") }}{{ form.age_years(class="form-control") }}</div>
+  <div class="mb-3">{{ form.size.label(class="form-label") }}{{ form.size(class="form-select") }}</div>
+  <div class="mb-3">{{ form.temperament.label(class="form-label") }}{{ form.temperament(class="form-control") }}</div>
+  <div class="mb-3">{{ form.description.label(class="form-label") }}{{ form.description(class="form-control", rows=4) }}{% for e in form.description.errors %}<div class="text-danger">{{ e }}</div>{% endfor %}</div>
+  <div class="mb-3">{{ form.medical_history.label(class="form-label") }}{{ form.medical_history(class="form-control", rows=3) }}</div>
+  <div class="mb-3">{{ form.special_requirements.label(class="form-label") }}{{ form.special_requirements(class="form-control", rows=2) }}</div>
+  <div class="form-check mb-2">{{ form.children_friendly(class="form-check-input") }}{{ form.children_friendly.label(class="form-check-label") }}</div>
+  <div class="form-check mb-3">{{ form.other_animals_friendly(class="form-check-input") }}{{ form.other_animals_friendly.label(class="form-check-label") }}</div>
+  <div class="mb-3">{{ form.photos.label(class="form-label") }}{{ form.photos(class="form-control", multiple=True) }}{% for e in form.photos.errors %}<div class="text-danger">{{ e }}</div>{% endfor %}</div>
+  {{ form.submit(class="btn btn-primary") }}
+</form>

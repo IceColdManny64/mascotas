@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Reseñas reportadas{% endblock %}
+{% block content %}
+<h1>Reseñas reportadas</h1>
+{% for review in reviews %}
+<div class="card mb-3">
+  <div class="card-body">
+    <p><strong>{{ review.rating }}/5</strong> — {{ review.reviewer.name }} sobre {{ review.shelter.name }}</p>
+    <p>{{ review.comment }}</p>
+    <p class="text-danger">Motivo: {{ review.reported_reason }}</p>
+    <form method="post" action="{{ url_for('admin.delete_review', review_id=review.id) }}">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <button class="btn btn-danger btn-sm">Eliminar valoración</button>
+    </form>
+  </div>
+</div>
+{% else %}
+<p>No hay reseñas reportadas.</p>
+{% endfor %}
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Admin{% endblock %}
+{% block content %}
+<h1>Panel de administración</h1>
+<div class="row g-3">
+  <div class="col-md-3"><div class="card card-body"><h6>Total mascotas</h6><p class="fs-3 mb-0">{{ metrics.total_pets }}</p></div></div>
+  <div class="col-md-3"><div class="card card-body"><h6>Disponibles</h6><p class="fs-3 mb-0">{{ metrics.available_pets }}</p></div></div>
+  <div class="col-md-3"><div class="card card-body"><h6>Adoptadas</h6><p class="fs-3 mb-0">{{ metrics.adopted_pets }}</p></div></div>
+  <div class="col-md-3"><div class="card card-body"><h6>Solicitudes pendientes</h6><p class="fs-3 mb-0">{{ metrics.pending_requests }}</p></div></div>
+  <div class="col-md-3"><div class="card card-body"><h6>Adoptantes</h6><p class="fs-3 mb-0">{{ metrics.total_users_adopter }}</p></div></div>
+  <div class="col-md-3"><div class="card card-body"><h6>Refugios</h6><p class="fs-3 mb-0">{{ metrics.total_users_shelter }}</p></div></div>
+  <div class="col-md-3"><div class="card card-body"><h6>Mascotas (30d)</h6><p class="fs-3 mb-0">{{ metrics.new_pets_30d }}</p></div></div>
+  <div class="col-md-3"><div class="card card-body"><h6>Usuarios (30d)</h6><p class="fs-3 mb-0">{{ metrics.new_users_30d }}</p></div></div>
+</div>
+<p class="mt-4">
+  <a href="{{ url_for('admin.pets') }}" class="btn btn-primary">Mascotas</a>
+  <a href="{{ url_for('admin.users') }}" class="btn btn-primary">Usuarios</a>
+  <a href="{{ url_for('admin.reported_reviews') }}" class="btn btn-warning">Reseñas reportadas</a>
+</p>
+{% endblock %}

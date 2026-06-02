@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Solicitud #{{ req.id }}{% endblock %}
+{% block content %}
+<h1>Solicitud para {{ req.pet.name }}</h1>
+<div class="row">
+  <div class="col-md-6">
+    <h5>Adoptante</h5>
+    <p>{{ req.adopter.name }} · {{ req.adopter.city or '—' }}<br>{{ req.adopter.bio or '' }}</p>
+    <h5>Datos del hogar</h5>
+    <ul>
+      <li>Vivienda: {{ req.home_type.value }}</li>
+      <li>Patio: {{ 'Sí' if req.has_yard else 'No' }}</li>
+      <li>Otras mascotas: {{ 'Sí' if req.other_pets else 'No' }}{% if req.other_pets_desc %} ({{ req.other_pets_desc }}){% endif %}</li>
+      <li>Hijos: {{ 'Sí' if req.has_children else 'No' }}{% if req.children_ages %} ({{ req.children_ages }}){% endif %}</li>
+    </ul>
+    <h5>Experiencia</h5>
+    <p>{{ req.experience }}</p>
+    <h5>Motivación</h5>
+    <p>{{ req.motivation }}</p>
+    {% if req.status.value == 'pending' %}
+    <form method="post" action="{{ url_for('adoptions.approve_request', req_id=req.id) }}" class="d-inline">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <button class="btn btn-success">Aprobar</button>
+    </form>
+    <form method="post" action="{{ url_for('adoptions.reject_request', req_id=req.id) }}" class="d-inline">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <button class="btn btn-danger">Rechazar</button>
+    </form>
+    {% endif %}
+    <a href="{{ url_for('messages.conversation', user_id=req.adopter_id, pet_id=req.pet_id) }}" class="btn btn-outline-primary">Mensaje</a>
+  </div>
+  <div class="col-md-6">
+    <h5>Mensajes</h5>
+    {% for msg in messages %}
+    <div class="border rounded p-2 mb-2 {% if msg.sender_id == current_user.id %}bg-light{% endif %}">
+      <small>{{ msg.created_at.strftime('%d/%m %H:%M') }}</small>
+      <p class="mb-0">{{ msg.content }}</p>
+    </div>
+    {% else %}
+    <p class="text-muted">Sin mensajes aún.</p>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

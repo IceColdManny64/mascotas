@@ -22,19 +22,14 @@ para las convenciones del proyecto.
 ## Specs activas
 Ver carpeta `.openspec/` — una spec por cada User Story.
 
-## Orden de implementación
-1. AUTH — registro y login (base de todo)
-2. US01 — crear perfil de mascota
-3. US02 + US03 — búsqueda y perfil completo
-4. US04 + US05 — solicitudes de adopción
-5. US06 — favoritos
-6. US08 — mensajería
-7. US07 — notificaciones
-8. US10 — valoraciones
-9. US09 — panel admin
+## Orden de implementación (completado)
+
+Ver `PROGRESS.md` y `.openspec/archive/INDEX.md` para el historial.
 
 ## Levantar el proyecto
 ```bash
-docker-compose up --build
+docker compose up --build
 ```
 La app estará en http://localhost:5000
+
+**Admin por defecto:** `admin@mascotas.local` / `admin12345`

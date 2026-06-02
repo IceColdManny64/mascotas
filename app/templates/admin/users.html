@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Admin usuarios{% endblock %}
+{% block content %}
+<h1>Usuarios</h1>
+<table class="table table-sm">
+  <thead><tr><th>Email</th><th>Nombre</th><th>Rol</th><th>Suspendido</th><th></th></tr></thead>
+  <tbody>
+  {% for user in pagination.items %}
+  <tr>
+    <td>{{ user.email }}</td>
+    <td>{{ user.name }}</td>
+    <td>{{ user.role.value }}</td>
+    <td>{{ 'Sí' if user.is_suspended else 'No' }}</td>
+    <td>
+      {% if user.id != current_user.id %}
+        {% if user.is_suspended %}
+        <form method="post" action="{{ url_for('admin.unsuspend_user', user_id=user.id) }}" class="d-inline">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          <button class="btn btn-sm btn-success">Reactivar</button>
+        </form>
+        {% else %}
+        <form method="post" action="{{ url_for('admin.suspend_user', user_id=user.id) }}" class="d-inline">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          <button class="btn btn-sm btn-danger">Suspender</button>
+        </form>
+        {% endif %}
+      {% else %}
+        <span class="text-muted">—</span>
+      {% endif %}
+    </td>
+  </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

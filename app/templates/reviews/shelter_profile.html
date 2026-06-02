@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}{{ shelter.name }}{% endblock %}
+{% block content %}
+<h1>{{ shelter.name }}</h1>
+<p>{{ shelter.city or '—' }}<br>{{ shelter.bio or '' }}</p>
+<p>Valoración: <strong>{{ avg_rating }}</strong>/5 ({{ total_reviews }} reseñas)</p>
+<div class="mb-2">
+  {% for i in range(1, 6) %}
+  <span class="text-warning">{% if i <= avg_rating|round %}★{% else %}☆{% endif %}</span>
+  {% endfor %}
+</div>
+{% if can_review and form %}
+<div class="card card-body mb-4">
+  <h5>Deja tu valoración</h5>
+  <form method="post" action="{{ url_for('reviews.create_review', shelter_id=shelter.id) }}">
+    {{ form.hidden_tag() }}
+    <div class="mb-2">{{ form.rating.label(class="form-label") }}{{ form.rating(class="form-control", type="number", min=1, max=5) }}</div>
+    <div class="mb-2">{{ form.comment.label(class="form-label") }}{{ form.comment(class="form-control", rows=3) }}</div>
+    {{ form.submit(class="btn btn-primary") }}
+  </form>
+</div>
+{% endif %}
+<h3>Mascotas disponibles</h3>
+<div class="row g-3 mb-4">
+{% for pet in pets.items %}
+  <div class="col-md-4"><a href="{{ url_for('pets.detail', pet_id=pet.id) }}" class="btn btn-outline-secondary w-100">{{ pet.name }}</a></div>
+{% endfor %}
+</div>
+<h3>Reseñas</h3>
+{% for review in reviews %}
+<div class="border rounded p-3 mb-2">
+  <strong>{{ review.rating }}/5</strong> — {{ review.reviewer.name }}
+  <p>{{ review.comment or '' }}</p>
+  {% if current_user.is_authenticated and review.reviewer_id != current_user.id %}
+  <form method="post" action="{{ url_for('reviews.report_review', review_id=review.id) }}" class="d-inline">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <input type="text" name="reason" class="form-control form-control-sm d-inline-block w-auto" placeholder="Motivo" required maxlength="200">
+    <button class="btn btn-sm btn-outline-danger">Reportar</button>
+  </form>
+  {% endif %}
+</div>
+{% else %}
+<p class="text-muted">Sin reseñas públicas.</p>
+{% endfor %}
+{% endblock %}

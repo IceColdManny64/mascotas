@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Solicitudes recibidas{% endblock %}
+{% block content %}
+<h1>Solicitudes de adopción</h1>
+<div class="mb-3">
+  <a href="{{ url_for('adoptions.shelter_requests') }}" class="btn btn-sm btn-outline-secondary">Todas</a>
+  <a href="{{ url_for('adoptions.shelter_requests', status='pending') }}" class="btn btn-sm btn-warning">Pendientes</a>
+  <a href="{{ url_for('adoptions.shelter_requests', status='approved') }}" class="btn btn-sm btn-success">Aprobadas</a>
+  <a href="{{ url_for('adoptions.shelter_requests', status='rejected') }}" class="btn btn-sm btn-danger">Rechazadas</a>
+</div>
+<table class="table">
+  <thead><tr><th>Mascota</th><th>Adoptante</th><th>Fecha</th><th>Estado</th><th></th></tr></thead>
+  <tbody>
+  {% for req in requests %}
+  <tr>
+    <td>{{ req.pet.name }}</td>
+    <td>{{ req.adopter.name }}</td>
+    <td>{{ req.created_at.strftime('%d/%m/%Y') }}</td>
+    <td><span class="badge bg-{% if req.status.value=='pending' %}warning text-dark{% elif req.status.value=='approved' %}success{% else %}danger{% endif %}">{{ req.status.value }}</span></td>
+    <td><a href="{{ url_for('adoptions.shelter_request_detail', req_id=req.id) }}" class="btn btn-sm btn-primary">Ver</a></td>
+  </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

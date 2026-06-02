@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Admin mascotas{% endblock %}
+{% block content %}
+<h1>Mascotas</h1>
+<table class="table table-sm">
+  <thead><tr><th>ID</th><th>Nombre</th><th>Estado</th><th>Activa</th><th></th></tr></thead>
+  <tbody>
+  {% for pet in pagination.items %}
+  <tr>
+    <td>{{ pet.id }}</td>
+    <td>{{ pet.name }}</td>
+    <td>{{ pet.status.value }}</td>
+    <td>{{ 'Sí' if pet.is_active else 'No' }}</td>
+    <td>
+      {% if pet.is_active %}
+      <form method="post" action="{{ url_for('admin.deactivate_pet', pet_id=pet.id) }}" class="d-inline">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <button class="btn btn-sm btn-warning">Desactivar</button>
+      </form>
+      {% else %}
+      <form method="post" action="{{ url_for('admin.activate_pet', pet_id=pet.id) }}" class="d-inline">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <button class="btn btn-sm btn-success">Activar</button>
+      </form>
+      {% endif %}
+    </td>
+  </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

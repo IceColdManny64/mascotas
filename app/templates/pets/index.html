@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block title %}Buscar mascotas{% endblock %}
+{% block content %}
+<h1>Adopta un compañero</h1>
+<form method="get" class="card card-body mb-4">
+  <div class="row g-3">
+    <div class="col-md-3">{{ form.species.label(class="form-label") }}{{ form.species(class="form-select") }}</div>
+    <div class="col-md-3">{{ form.breed.label(class="form-label") }}{{ form.breed(class="form-control") }}</div>
+    <div class="col-md-2">{{ form.age_min.label(class="form-label") }}{{ form.age_min(class="form-control") }}</div>
+    <div class="col-md-2">{{ form.age_max.label(class="form-label") }}{{ form.age_max(class="form-control") }}</div>
+    <div class="col-md-2">{{ form.size.label(class="form-label") }}{{ form.size(class="form-select") }}</div>
+    <div class="col-md-3">{{ form.location.label(class="form-label") }}{{ form.location(class="form-control") }}</div>
+    <div class="col-md-3 form-check mt-4">{{ form.children_friendly(class="form-check-input") }}{{ form.children_friendly.label(class="form-check-label") }}</div>
+    <div class="col-md-3 form-check mt-4">{{ form.other_animals_friendly(class="form-check-input") }}{{ form.other_animals_friendly.label(class="form-check-label") }}</div>
+    <div class="col-md-3 align-self-end">{{ form.submit(class="btn btn-primary") }}</div>
+  </div>
+</form>
+<p class="text-muted">{{ total }} mascota(s) encontrada(s)</p>
+{% if pets %}
+<div class="row g-4">
+  {% for pet in pets %}
+  <div class="col-md-4">
+    <div class="card pet-card h-100">
+      {% set photo = pet.photos|selectattr('is_primary')|first or (pet.photos|first) %}
+      {% if photo %}
+      <img src="{{ url_for('static', filename=photo.url) }}" class="card-img-top" alt="{{ pet.name }}">
+      {% else %}
+      <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height:200px">Sin foto</div>
+      {% endif %}
+      <div class="card-body">
+        <h5 class="card-title">{{ pet.name }}</h5>
+        <p class="card-text">{{ pet.species.value }} · {{ pet.breed or '—' }}{% if pet.age_years is not none %} · {{ pet.age_years }} años{% endif %}</p>
+        <a href="{{ url_for('pets.detail', pet_id=pet.id) }}" class="btn btn-outline-primary">Ver perfil</a>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% set pg_args = request.args.to_dict(flat=True) %}
+<nav class="mt-4">
+  <ul class="pagination">
+    {% if pagination.has_prev %}
+    {% set _ = pg_args.update({'page': pagination.prev_num}) %}
+    <li class="page-item"><a class="page-link" href="{{ url_for('pets.index', **pg_args) }}">Anterior</a></li>
+    {% endif %}
+    <li class="page-item disabled"><span class="page-link">Pág. {{ pagination.page }} / {{ pagination.pages or 1 }}</span></li>
+    {% if pagination.has_next %}
+    {% set pg_args2 = request.args.to_dict(flat=True) %}
+    {% set _ = pg_args2.update({'page': pagination.next_num}) %}
+    <li class="page-item"><a class="page-link" href="{{ url_for('pets.index', **pg_args2) }}">Siguiente</a></li>
+    {% endif %}
+  </ul>
+</nav>
+{% else %}
+<div class="alert alert-info">No hay mascotas que coincidan con tu búsqueda. Prueba otros filtros.</div>
+{% endif %}
+{% endblock %}

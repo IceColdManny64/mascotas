@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Favoritos{% endblock %}
+{% block content %}
+<h1>Mis favoritos</h1>
+{% if favorites %}
+<div class="row g-3">
+{% for fav in favorites %}
+  <div class="col-md-4">
+    <div class="card">
+      {% set photo = fav.pet.photos|selectattr('is_primary')|first or (fav.pet.photos|first) %}
+      {% if photo %}<img src="{{ url_for('static', filename=photo.url) }}" class="card-img-top" style="height:150px;object-fit:cover">{% endif %}
+      <div class="card-body">
+        <h5>{{ fav.pet.name }}</h5>
+        <p>{{ fav.pet.species.value }} · Estado: <strong>{{ fav.pet.status.value }}</strong></p>
+        <a href="{{ url_for('pets.detail', pet_id=fav.pet_id) }}" class="btn btn-sm btn-primary">Ver</a>
+      </div>
+    </div>
+  </div>
+{% endfor %}
+</div>
+{% else %}
+<p>No tienes favoritos guardados.</p>
+{% endif %}
+{% endblock %}

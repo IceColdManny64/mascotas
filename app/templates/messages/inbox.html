@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Mensajes{% endblock %}
+{% block content %}
+<h1>Bandeja de entrada</h1>
+<ul class="list-group">
+{% for conv in conversations %}
+  <a href="{{ url_for('messages.conversation', user_id=conv.other.id) }}" class="list-group-item list-group-item-action">
+    <div class="d-flex justify-content-between">
+      <strong>{{ conv.other.name }}</strong>
+      <small>{{ conv.last_at.strftime('%d/%m %H:%M') if conv.last_at else '' }}</small>
+    </div>
+    <p class="mb-0 text-muted">{{ conv.preview }}{% if conv.unread %} <span class="badge bg-danger">{{ conv.unread }}</span>{% endif %}</p>
+  </a>
+{% else %}
+  <li class="list-group-item text-muted">No tienes conversaciones.</li>
+{% endfor %}
+</ul>
+{% endblock %}
