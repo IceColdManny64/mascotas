@@ -1,12 +1,21 @@
+import re
+
 from flask_wtf import FlaskForm
 from wtforms import EmailField, PasswordField, SelectField, StringField, SubmitField
-from wtforms.validators import DataRequired, Email, EqualTo, Length, ValidationError
+from wtforms.validators import DataRequired, EqualTo, Length, ValidationError
 
 from app.models.user import User, UserRole
 
+EMAIL_RE = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
+
+
+def loose_email(form, field):
+    if not EMAIL_RE.match(field.data or ""):
+        raise ValidationError("Ingresa un email válido.")
+
 
 class RegisterForm(FlaskForm):
-    email = EmailField("Email", validators=[DataRequired(), Email(), Length(max=150)])
+    email = EmailField("Email", validators=[DataRequired(), loose_email, Length(max=150)])
     password = PasswordField(
         "Contraseña", validators=[DataRequired(), Length(min=8, max=128)]
     )
@@ -25,6 +34,6 @@ class RegisterForm(FlaskForm):
 
 
 class LoginForm(FlaskForm):
-    email = EmailField("Email", validators=[DataRequired(), Email()])
+    email = EmailField("Email", validators=[DataRequired(), loose_email])
     password = PasswordField("Contraseña", validators=[DataRequired()])
     submit = SubmitField("Iniciar sesión")

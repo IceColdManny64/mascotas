@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mascotas App — Mapa Mental</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Fraunces:ital,wght@0,300;0,600;0,900;1,300&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:      #f5f0e8;
+  --ink:     #1a1612;
+  --muted:   #7a6f62;
+  --rule:    #d6cfc4;
+
+  --c1: #c94a2b; /* rojo — presentación */
+  --c2: #2b6cc9; /* azul — aplicación  */
+  --c3: #2ba06c; /* verde — datos       */
+  --c4: #b87a1a; /* ámbar — infra       */
+  --c5: #7b44c9; /* violeta — archivos  */
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'Fraunces', Georgia, serif;
+  min-height: 100vh;
+  padding: 0;
+}
+
+/* ── PAGE ── */
+.page {
+  width: 1280px;
+  min-height: 820px;
+  margin: 0 auto;
+  padding: 52px 60px 60px;
+  position: relative;
+}
+
+/* ── TITLE ── */
+.page-title {
+  font-size: 2.6rem;
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  margin-bottom: 6px;
+}
+.page-subtitle {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.72rem;
+  color: var(--muted);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 44px;
+}
+
+/* ── GRID OF CLUSTERS ── */
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: auto auto;
+  gap: 20px;
+}
+
+/* ── CLUSTER ── */
+.cluster {
+  border: 2px solid;
+  border-radius: 20px;
+  padding: 22px 24px;
+  position: relative;
+  background: white;
+}
+.cluster.span2 { grid-column: span 2; }
+
+.cluster-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.62rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+.cluster-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  margin-bottom: 18px;
+  line-height: 1.1;
+}
+
+/* color themes */
+.c1 { border-color: var(--c1); }
+.c1 .cluster-label { color: var(--c1); }
+.c1 .cluster-title { color: var(--c1); }
+
+.c2 { border-color: var(--c2); }
+.c2 .cluster-label { color: var(--c2); }
+.c2 .cluster-title { color: var(--c2); }
+
+.c3 { border-color: var(--c3); }
+.c3 .cluster-label { color: var(--c3); }
+.c3 .cluster-title { color: var(--c3); }
+
+.c4 { border-color: var(--c4); }
+.c4 .cluster-label { color: var(--c4); }
+.c4 .cluster-title { color: var(--c4); }
+
+.c5 { border-color: var(--c5); }
+.c5 .cluster-label { color: var(--c5); }
+.c5 .cluster-title { color: var(--c5); }
+
+/* ── PILL TAGS ── */
+.pills { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 16px; }
+.pill {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.68rem;
+  padding: 4px 11px;
+  border-radius: 999px;
+  border: 1.5px solid;
+  white-space: nowrap;
+}
+.c1 .pill { color: var(--c1); border-color: var(--c1); background: #fdf1ee; }
+.c2 .pill { color: var(--c2); border-color: var(--c2); background: #eef3fd; }
+.c3 .pill { color: var(--c3); border-color: var(--c3); background: #eefaf4; }
+.c4 .pill { color: var(--c4); border-color: var(--c4); background: #fdf6ea; }
+.c5 .pill { color: var(--c5); border-color: var(--c5); background: #f5effe; }
+
+/* ── BULLETS ── */
+.items { list-style: none; display: flex; flex-direction: column; gap: 7px; }
+.items li {
+  font-size: 0.82rem;
+  color: #3a3530;
+  line-height: 1.45;
+  padding-left: 16px;
+  position: relative;
+}
+.items li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 7px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.c1 .items li::before { background: var(--c1); }
+.c2 .items li::before { background: var(--c2); }
+.c3 .items li::before { background: var(--c3); }
+.c4 .items li::before { background: var(--c4); }
+.c5 .items li::before { background: var(--c5); }
+
+.items li strong {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.72rem;
+  font-weight: 500;
+}
+
+/* ── BLUEPRINT TABLE (inside app cluster) ── */
+.bp-table { width: 100%; border-collapse: collapse; }
+.bp-table tr { border-bottom: 1px solid var(--rule); }
+.bp-table tr:last-child { border-bottom: none; }
+.bp-table td {
+  padding: 6px 8px 6px 0;
+  font-size: 0.78rem;
+  vertical-align: top;
+}
+.bp-name {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--c2);
+  white-space: nowrap;
+  padding-right: 12px !important;
+  min-width: 120px;
+}
+.bp-route {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--muted);
+  white-space: nowrap;
+  padding-right: 12px !important;
+  min-width: 110px;
+}
+.bp-desc { color: #3a3530; line-height: 1.4; }
+
+/* ── MODEL TAGS ── */
+.model-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+.model-box {
+  border: 1.5px solid var(--c3);
+  border-radius: 10px;
+  padding: 9px 10px;
+  background: #f5fdf8;
+}
+.model-name {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: var(--c3);
+  margin-bottom: 5px;
+}
+.model-fields {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.58rem;
+  color: var(--muted);
+  line-height: 1.8;
+}
+
+/* ── DOCKER SERVICES ── */
+.docker-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.svc-box {
+  border: 1.5px solid var(--c4);
+  border-radius: 10px;
+  padding: 12px;
+  background: #fffbf3;
+}
+.svc-name {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--c4);
+  margin-bottom: 8px;
+}
+.svc-kv { display: flex; flex-direction: column; gap: 4px; }
+.kv { display: flex; gap: 6px; font-family: 'DM Mono', monospace; font-size: 0.62rem; }
+.k { color: var(--muted); min-width: 70px; }
+.v { color: var(--ink); }
+
+/* ── RULE line decoration ── */
+.rule {
+  width: 40px;
+  height: 3px;
+  border-radius: 2px;
+  margin-bottom: 14px;
+}
+.c1 .rule { background: var(--c1); }
+.c2 .rule { background: var(--c2); }
+.c3 .rule { background: var(--c3); }
+.c4 .rule { background: var(--c4); }
+.c5 .rule { background: var(--c5); }
+
+/* ── PAGE NUMBER ── */
+.page-num {
+  position: absolute;
+  bottom: 24px;
+  right: 60px;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--muted);
+  letter-spacing: 0.1em;
+}
+
+/* Print / screenshot hint */
+.hint {
+  text-align: center;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--muted);
+  padding: 12px 0 24px;
+  letter-spacing: 0.08em;
+}
+
+@media print {
+  .hint { display: none; }
+  body { background: white; }
+}
+</style>
+</head>
+<body>
+
+<div class="hint">⌘ + scroll para ajustar zoom · Captura de pantalla por página</div>
+
+<!-- ═══════════════════ PÁGINA 1 ═══════════════════ -->
+<div class="page">
+  <div class="page-title">Mascotas App</div>
+  <div class="page-subtitle">Arquitectura — Capa de presentación · Capa de aplicación</div>
+
+  <div class="grid">
+
+    <!-- PRESENTACIÓN -->
+    <div class="cluster c1">
+      <div class="rule"></div>
+      <div class="cluster-label">Capa 1</div>
+      <div class="cluster-title">Presentación</div>
+      <div class="pills">
+        <span class="pill">Jinja2</span>
+        <span class="pill">Bootstrap 5.3</span>
+        <span class="pill">JS Vanilla</span>
+        <span class="pill">Fetch API</span>
+      </div>
+      <ul class="items">
+        <li>Renderizado <strong>server-side</strong> completo con Jinja2</li>
+        <li>Sin framework JS frontend — lógica en templates HTML</li>
+        <li>Bootstrap 5.3 para diseño <strong>responsivo</strong></li>
+        <li>Fetch API solo para toggle de <strong>favoritos</strong> (async)</li>
+        <li>Herencia de layouts con <strong>{% extends %}</strong></li>
+      </ul>
+    </div>
+
+    <!-- APLICACIÓN — span 2 -->
+    <div class="cluster c2 span2">
+      <div class="rule"></div>
+      <div class="cluster-label">Capa 2</div>
+      <div class="cluster-title">Aplicación — Flask 3.x</div>
+      <div class="pills">
+        <span class="pill">Application Factory</span>
+        <span class="pill">Flask-Login</span>
+        <span class="pill">Flask-WTF</span>
+        <span class="pill">CSRF</span>
+        <span class="pill">@roles_required</span>
+      </div>
+
+      <table class="bp-table">
+        <tr>
+          <td class="bp-name">auth_bp</td>
+          <td class="bp-route">/  /login  /register</td>
+          <td class="bp-desc">Registro, login, logout. Gestión de sesiones con Flask-Login.</td>
+        </tr>
+        <tr>
+          <td class="bp-name">pets_bp</td>
+          <td class="bp-route">/pets</td>
+          <td class="bp-desc">CRUD de mascotas, búsqueda con filtros, gestión de fotos.</td>
+        </tr>
+        <tr>
+          <td class="bp-name">adoptions_bp</td>
+          <td class="bp-route">/adoptions  /shelter</td>
+          <td class="bp-desc">Solicitudes de adopción, favoritos, panel del refugio.</td>
+        </tr>
+        <tr>
+          <td class="bp-name">alerts_bp</td>
+          <td class="bp-route">/alerts</td>
+          <td class="bp-desc">Configuración de alertas de búsqueda personalizadas.</td>
+        </tr>
+        <tr>
+          <td class="bp-name">messages_bp</td>
+          <td class="bp-route">/messages</td>
+          <td class="bp-desc">Mensajería interna entre adoptante y refugio.</td>
+        </tr>
+        <tr>
+          <td class="bp-name">reviews_bp</td>
+          <td class="bp-route">/shelters  /reviews</td>
+          <td class="bp-desc">Perfiles de refugio, valoraciones y reportes.</td>
+        </tr>
+        <tr>
+          <td class="bp-name">admin_bp</td>
+          <td class="bp-route">/admin</td>
+          <td class="bp-desc">Dashboard de métricas y herramientas de moderación.</td>
+        </tr>
+      </table>
+    </div>
+
+    <!-- SEGURIDAD (complemento de la capa 2) -->
+    <div class="cluster c2" style="grid-column:span 3; padding: 18px 24px;">
+      <div style="display:flex; gap:32px; flex-wrap:wrap; align-items:flex-start;">
+        <div>
+          <div style="font-family:'DM Mono',monospace; font-size:.62rem; color:var(--c2); letter-spacing:.12em; text-transform:uppercase; margin-bottom:8px;">Autenticación</div>
+          <ul class="items" style="gap:5px;">
+            <li>Sesiones gestionadas por <strong>Flask-Login</strong></li>
+            <li>Contraseñas hasheadas con <strong>Werkzeug</strong></li>
+            <li>Roles: <strong>adopter · shelter · admin</strong></li>
+          </ul>
+        </div>
+        <div>
+          <div style="font-family:'DM Mono',monospace; font-size:.62rem; color:var(--c2); letter-spacing:.12em; text-transform:uppercase; margin-bottom:8px;">Autorización</div>
+          <ul class="items" style="gap:5px;">
+            <li>Decorador <strong>@roles_required</strong> por ruta</li>
+            <li>Suspensión de cuentas (<strong>is_suspended</strong>)</li>
+          </ul>
+        </div>
+        <div>
+          <div style="font-family:'DM Mono',monospace; font-size:.62rem; color:var(--c2); letter-spacing:.12em; text-transform:uppercase; margin-bottom:8px;">Protección</div>
+          <ul class="items" style="gap:5px;">
+            <li><strong>CSRF</strong> en todos los forms POST vía Flask-WTF</li>
+            <li>Validación de formularios con <strong>WTForms</strong></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /grid -->
+
+  <div class="page-num">01 / 02</div>
+</div>
+
+<!-- ═══════════════════ PÁGINA 2 ═══════════════════ -->
+<div class="page" style="border-top: 2px solid var(--rule);">
+  <div class="page-title">Mascotas App</div>
+  <div class="page-subtitle">Arquitectura — Capa de datos · Infraestructura · Almacenamiento</div>
+
+  <div class="grid">
+
+    <!-- DATOS — full width -->
+    <div class="cluster c3" style="grid-column:span 3;">
+      <div class="rule"></div>
+      <div class="cluster-label">Capa 3</div>
+      <div class="cluster-title">Datos — SQLAlchemy 2.x · PostgreSQL 15</div>
+      <div class="pills" style="margin-bottom:18px;">
+        <span class="pill">SQLAlchemy 2.x ORM</span>
+        <span class="pill">Unit of Work</span>
+        <span class="pill">Flask-Migrate</span>
+        <span class="pill">Alembic</span>
+        <span class="pill">PostgreSQL 15</span>
+      </div>
+
+      <div class="model-grid">
+        <div class="model-box">
+          <div class="model-name">User</div>
+          <div class="model-fields">email · password_hash<br>name · role (enum)<br>city · phone · bio<br>is_suspended</div>
+        </div>
+        <div class="model-box">
+          <div class="model-name">Pet · PetPhoto</div>
+          <div class="model-fields">name · species · breed<br>age · size · status<br>children/animals_friendly<br>shelter_id → User</div>
+        </div>
+        <div class="model-box">
+          <div class="model-name">AdoptionRequest</div>
+          <div class="model-fields">pet_id · adopter_id<br>status (enum)<br>home_type · has_yard<br>experience · motivation</div>
+        </div>
+        <div class="model-box">
+          <div class="model-name">Favorite</div>
+          <div class="model-fields">adopter_id → User<br>pet_id → Pet<br>UNIQUE(adopter, pet)<br>created_at</div>
+        </div>
+        <div class="model-box">
+          <div class="model-name">Message</div>
+          <div class="model-fields">sender_id · receiver_id<br>adoption_request_id<br>content · is_read<br>created_at</div>
+        </div>
+        <div class="model-box">
+          <div class="model-name">Notification</div>
+          <div class="model-fields">user_id → User<br>type (enum)<br>message · link<br>is_read</div>
+        </div>
+        <div class="model-box">
+          <div class="model-name">SearchAlert</div>
+          <div class="model-fields">adopter_id → User<br>species · breed<br>age_max · size<br>is_active</div>
+        </div>
+        <div class="model-box">
+          <div class="model-name">Review</div>
+          <div class="model-fields">shelter_id · reviewer_id<br>adoption_request_id<br>rating · comment<br>is_reported</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- INFRAESTRUCTURA -->
+    <div class="cluster c4 span2">
+      <div class="rule"></div>
+      <div class="cluster-label">Infraestructura</div>
+      <div class="cluster-title">Docker Compose</div>
+      <div class="pills">
+        <span class="pill">2 servicios</span>
+        <span class="pill">Env vars</span>
+        <span class="pill">Hot-reload</span>
+        <span class="pill">Healthcheck</span>
+      </div>
+      <div class="docker-row">
+        <div class="svc-box">
+          <div class="svc-name">🌐 web (Flask)</div>
+          <div class="svc-kv">
+            <div class="kv"><span class="k">imagen</span><span class="v">python:3.11-slim</span></div>
+            <div class="kv"><span class="k">puerto</span><span class="v">0.0.0.0:5000</span></div>
+            <div class="kv"><span class="k">volume</span><span class="v">.:/app  (hot-reload)</span></div>
+            <div class="kv"><span class="k">arranque</span><span class="v">db upgrade → seed → run</span></div>
+            <div class="kv"><span class="k">depende</span><span class="v">db (service_healthy)</span></div>
+          </div>
+        </div>
+        <div class="svc-box">
+          <div class="svc-name">🐘 db (PostgreSQL)</div>
+          <div class="svc-kv">
+            <div class="kv"><span class="k">imagen</span><span class="v">postgres:15</span></div>
+            <div class="kv"><span class="k">puerto</span><span class="v">5432</span></div>
+            <div class="kv"><span class="k">volumen</span><span class="v">pgdata (persistente)</span></div>
+            <div class="kv"><span class="k">healthcheck</span><span class="v">pg_isready · 5s</span></div>
+            <div class="kv"><span class="k">DB</span><span class="v">petadoption</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ALMACENAMIENTO -->
+    <div class="cluster c5">
+      <div class="rule"></div>
+      <div class="cluster-label">Archivos</div>
+      <div class="cluster-title">Almacenamiento local</div>
+      <div class="pills">
+        <span class="pill">UUID names</span>
+        <span class="pill">Validación</span>
+      </div>
+      <ul class="items">
+        <li>Ruta: <strong>app/static/uploads/</strong></li>
+        <li>Nombres <strong>UUID</strong> — sin colisiones</li>
+        <li>Extensiones: <strong>jpg · jpeg · png · webp</strong></li>
+        <li>Tamaño máximo: <strong>2 MB</strong> por archivo</li>
+        <li>Validación <strong>server-side</strong> antes de guardar</li>
+      </ul>
+    </div>
+
+  </div><!-- /grid -->
+
+  <div class="page-num">02 / 02</div>
+</div>
+
+</body>
+</html>
